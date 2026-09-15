@@ -33,13 +33,8 @@ graph TD
 ## Data Flow
 
 1. Telemetry Ingestion & Column Normalization: The user uploads a 24-hour sensor log CSV (or selects the built-in sample day) via the web interface. The backend ingests the file and automatically normalizes varied naming schemas into standardized internal parameters (grid_demand_mw, actual_solar_mw, actual_wind_mw, inverter_temp_c).
-2. ### 📈 Net Load & Ramp Analytics 
-* **Net Load Formula:**  
-  `Net Load(t) = Demand(t) - [P_solar(t) + P_wind(t)]`
-* **Ramp Rate Formula:**  
-  `Ramp Rate = Δ(Net Load) / Δt`
-* **Critical Flag:** Triggers on evening ramp windows exceeding **50 MW/hr**.
-
+2. Net Load & Ramp Analytics: src/analytics.py calculates hourly net load:$$\text{Net Load}(t) = \text{Demand}(t) - (P_{\text{solar}}(t) + P_{\text{wind}}(t))$$
+It calculates the hourly ramp rate $\frac{\Delta\text{Net Load}}{\Delta t}$ and flags critical evening ramp windows exceeding $50\text{ MW/hr}$.  
 3. Asset Diagnostics & Root Cause Tagging: The engine evaluates asset-level telemetry against theoretical output expectations. Units exhibiting a Performance Ratio below threshold under high irradiance with elevated inverter temperatures are tagged with root-cause labels (e.g., Thermal Derating / Heat Exchanger Clogging).
 4. Curtailment & BESS Scheduling: Where renewable generation exceeds grid load, the optimization algorithm allocates charge cycles to a 50 MWh Battery Energy Storage System (BESS) up to its 90% State-of-Charge limit, quantifying avoided curtailment (MWh) and planning evening peak discharge.
 5. Agentic Synthesis via IBM Granite: The aggregated numerical results (peak ramp hours, avoided curtailment, asset warnings) are structured into a JSON payload and forwarded to watsonx.ai. The granite-3-8b-instruct model outputs a structured, actionable BLUF operator dispatch brief.
