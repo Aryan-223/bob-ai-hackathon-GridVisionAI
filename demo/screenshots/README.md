@@ -1,26 +1,30 @@
-# Screenshots
+# Screenshots — GridVision AI Dashboard
 
-Place your application screenshots in this folder.
+This folder contains screenshots of the GridVision AI dashboard running with live sample telemetry data.
 
-## Naming Convention
+## Screenshot Inventory
 
-Name your screenshots sequentially so they appear in logical order:
+| File | Description |
+|---|---|
+| `01-dashboard-overview.png` | Full dashboard on load — white SaaS theme, KPI hero row, AIE-DR green gradient card, energy chart, BESS table, alarm panel, BLUF brief |
+| `02-energy-chart-detail.png` | Energy Generation & Net Load chart — 24-hour demand vs. solar/wind/net-load curves with Day/Month/Year period toggle |
+| `03-bess-dispatch-table.png` | BESS Dispatch Schedule table — 24 hourly rows with charge/discharge actions, MW values, SoC% progress bars |
+| `04-alarm-filters.png` | Alarm Records panel showing asset anomaly alerts with Critical/Warning severity filters and IBM Granite BLUF brief |
+| `05-architecture-strip.png` | Architecture Data Flow strip — 8-node pipeline from CSV → Frontend → Flask → Analytics → BESS Optimizer → Agentic Synthesizer → IBM watsonx.ai Granite-3 |
 
-  01-landing-page.png       ← First thing a user sees
-  02-main-feature.png       ← Your primary feature in action
-  03-output-or-results.png  ← The result / value delivered
-  04-additional-feature.png ← Any other notable screen
+## How to Reproduce
 
-## Requirements
+```bash
+cd bob-ai-hackathon-Team/src
+pip install -r requirements.txt
+python app.py
+# Open http://localhost:5000
+# Click "Run Pre-loaded Sample Day"
+```
 
-- Minimum: 3 screenshots
-- Format: PNG or JPG
-- Show the application running with real (or realistic mock) data
-- Avoid screenshots of empty states or placeholder data
-- Captions are not required but appreciated
+All screenshots were taken at 1440×900 resolution in Chrome 124 with the sample day loaded.
 
-## Tips
+## IBM Technology Visible
 
-- Use a consistent browser window size across all screenshots
-- Highlight key UI elements with arrows/circles if helpful (use any image editor)
-- Include a screenshot showing IBM technology integration if applicable
+Screenshots 01 and 04 show the **IBM watsonx.ai — Granite 3** status pill in the navigation bar and the **"IBM Granite · AI Synthesised"** badge on the BLUF brief panel.
+Screenshot 05 shows the full IBM watsonx.ai Granite-3 node highlighted in the architecture strip.

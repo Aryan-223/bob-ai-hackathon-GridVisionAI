@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GridVision AI — Smarter Grids. Cleaner Tomorrow.</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════ TOP NAV -->
+<nav class="nav">
+
+  <!-- Brand -->
+  <a class="nav-brand" href="#">
+    <div class="logo-circle">
+      <!-- G lettermark -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M20 12H13v3h4.5A6 6 0 1 1 12 6a6 6 0 0 1 4.24 1.76" stroke="#0a0f1e" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="12" cy="12" r="1.5" fill="#0a0f1e"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <span class="brand-main">Grid<span>Vision</span> AI</span>
+      <span class="brand-sub">Smarter Grids · Cleaner Tomorrow</span>
+    </div>
+  </a>
+
+  <div class="nav-divider"></div>
+
+  <!-- Tabs -->
+  <div class="nav-tabs">
+    <button class="ntab active">Overview</button>
+    <button class="ntab">Alarms</button>
+    <button class="ntab">BESS Schedule</button>
+    <button class="ntab">Reports</button>
+    <button class="ntab">Architecture</button>
+  </div>
+
+  <!-- Right controls -->
+  <div class="nav-right">
+    <!-- Weather chip -->
+    <div class="weather-chip">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+      Partly Cloudy 22°C
+    </div>
+    <!-- Watsonx status pill -->
+    <div class="status-pill">
+      <span class="status-dot"></span>
+      IBM watsonx.ai — Granite 3
+    </div>
+    <!-- Search icon -->
+    <div class="nav-icon">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+    <!-- Alarm bell -->
+    <div class="nav-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="nav-badge" id="hdr-alarm-count">0</span>
+    </div>
+    <!-- Avatar -->
+    <div class="avatar">OP</div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════ PAGE BODY -->
+<div class="page">
+
+  <!-- ── KPI HERO ROW ──────────────────────────────────────── -->
+  <div class="hero-row">
+
+    <!-- Peak Net-Demand Ramp -->
+    <div class="card kpi-card">
+      <div class="kpi-label">Peak Net-Demand Ramp</div>
+      <div class="kpi-value accent" id="kv-ramp">—</div>
+      <div class="kpi-sub">MW / hr</div>
+      <span class="kpi-badge ok" id="kb-ramp">✓ Normal</span>
+    </div>
+
+    <!-- Midday Surplus -->
+    <div class="card kpi-card">
+      <div class="kpi-label">Midday Renewable Surplus</div>
+      <div class="kpi-value blue" id="kv-surplus">—</div>
+      <div class="kpi-sub">MW overgeneration</div>
+      <span class="kpi-badge ok">↑ BESS charging</span>
+    </div>
+
+    <!-- Avoided Curtailment -->
+    <div class="card kpi-card">
+      <div class="kpi-label">Avoided Curtailment</div>
+      <div class="kpi-value" id="kv-curtail">—</div>
+      <div class="kpi-sub">MWh stored via BESS</div>
+      <span class="kpi-badge ok">✓ Optimised</span>
+    </div>
+
+    <!-- Active Alerts -->
+    <div class="card kpi-card">
+      <div class="kpi-label">Active Asset Alerts</div>
+      <div class="kpi-value red" id="kv-alerts">—</div>
+      <div class="kpi-sub">anomalies detected</div>
+      <span class="kpi-badge ok" id="kb-alerts">All Clear</span>
+    </div>
+  </div>
+
+  <!-- ── MAIN 3-COL BODY GRID ──────────────────────────────── -->
+  <div class="body-grid">
+
+    <!-- ── LEFT SIDEBAR ──────────────────────────────────── -->
+    <aside class="sidebar">
+
+      <!-- AIE-DR Decision Card -->
+      <div class="aie-card">
+        <div class="aie-top">
+          <div class="aie-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+              </div>
+          <span class="aie-title">AIE-DR Active</span>
+          <span class="aie-live">Live</span>
+        </div>
+        <p class="aie-strategy">Strategy: <b>Peak shaving &amp; valley filling during discharge</b></p>
+        <div class="aie-reason">
+          <div class="aie-reason-lbl">Decision Reason</div>
+          <p class="aie-reason-txt" id="aie-reason-txt">Run analysis to populate decision context.</p>
+        </div>
+        <div class="aie-stats">
+          <div><div class="aie-stat-lbl">Savings</div><div class="aie-stat-val" id="aie-saved">—</div></div>
+          <div><div class="aie-stat-lbl">Peak SoC</div><div class="aie-stat-val" id="aie-soc">—</div></div>
+        </div>
+        <button class="btn-primary" id="btn-run-sample">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Run Pre-loaded Sample Day
+        </button>
+        <button class="btn-ghost" id="btn-view-details">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          View Details
+        </button>
+      </div>
+
+      <!-- CSV Upload -->
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" id="csv-file-input" accept=".csv,.txt,.tsv" multiple style="display:none"/>
+        <div class="upload-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <p class="upload-title">Drop CSV files here</p>
+        <p class="upload-sub">or <label for="csv-file-input" class="upload-link">browse files</label></p>
+        <p class="upload-hint">GridVision CSV · Kaggle Generation · Kaggle Weather</p>
+        <div class="file-list" id="file-list"></div>
+        <button class="btn-merge" id="btn-merge-run">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Analyse &amp; Merge
+        </button>
+      </div>
+
+      <!-- System Info -->
+      <div class="card sysinfo-card">
+        <div class="sysinfo-row">
+          <svg class="sysinfo-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+          <span class="sysinfo-lbl">Solar (Midday)</span>
+          <span class="sysinfo-val" id="si-solar">—</span>
+        </div>
+        <div class="sysinfo-row">
+          <svg class="sysinfo-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          <span class="sysinfo-lbl">Wind (Midday)</span>
+          <span class="sysinfo-val" id="si-wind">—</span>
+        </div>
+        <div class="sysinfo-row">
+          <svg class="sysinfo-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span class="sysinfo-lbl">Peak Ramp Rate</span>
+          <span class="sysinfo-val" id="si-ramp">—</span>
+        </div>
+        <div class="sysinfo-row">
+          <svg class="sysinfo-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          <span class="sysinfo-lbl">BESS Capacity</span>
+          <span class="sysinfo-val">50 MWh</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── CENTRE COLUMN ──────────────────────────────────── -->
+    <section class="centre">
+
+      <!-- Energy Chart -->
+      <div class="card chart-card">
+        <div class="chart-header">
+          <span class="chart-title">Energy Generation &amp; Net Load — 24h</span>
+          <div class="chart-controls">
+            <div class="legend">
+              <span class="li"><span class="ld" style="background:#3b82f6"></span>Demand</span>
+              <span class="li"><span class="ld" style="background:#f59e0b"></span>Solar</span>
+              <span class="li"><span class="ld" style="background:#10b981"></span>Wind</span>
+              <span class="li"><span class="ld" style="background:#00c896"></span>Net Load</span>
+            </div>
+            <div class="seg-toggle">
+              <button class="seg-btn active" data-period="day">Day</button>
+              <button class="seg-btn"        data-period="month">Month</button>
+              <button class="seg-btn"        data-period="year">Year</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="main-chart"></canvas>
+          <div class="loading" id="loading-overlay">
+            <div class="spin"></div><span>Analysing telemetry…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BESS Dispatch Table -->
+      <div class="card bess-card">
+        <div class="card-header">
+          <span class="card-title">BESS Dispatch Schedule</span>
+          <span class="card-sub" id="bess-avoided">Avoided: —</span>
+        </div>
+        <div class="bess-wrap">
+          <table>
+            <thead><tr><th>Hour</th><th>Action</th><th>MW</th><th>SoC %</th></tr></thead>
+            <tbody id="bess-tbody"><tr><td colspan="4" class="ph-row">Run analysis to populate</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── RIGHT PANEL ────────────────────────────────────── -->
+    <aside class="rpanel">
+
+      <!-- PV Saving -->
+      <div class="card saving-card">
+        <div class="saving-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+          PV Generation
+        </div>
+        <div class="saving-value" id="sv-pv">—</div>
+        <div class="saving-sub a">Total solar today</div>
+      </div>
+
+      <!-- BESS / AIE-DR Saving -->
+      <div class="card saving-card">
+        <div class="saving-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          BESS Saving
+        </div>
+        <div class="saving-value" id="sv-bess">—</div>
+        <div class="saving-sub b">Avoided curtailment</div>
+      </div>
+
+      <!-- Sun Hour sparkline -->
+      <div class="card spark-card">
+        <div class="spark-hdr">
+          <span class="spark-title">Sun Hour Profile</span>
+          <span class="spark-date" id="sun-date">2024-07-15</span>
+        </div>
+        <div class="spark-wrap"><canvas id="sun-sparkline"></canvas></div>
+        <div class="spark-avg">Average: <b id="sun-avg-val">— MW</b></div>
+      </div>
+
+      <!-- Summary -->
+      <div class="card sum-card">
+        <div class="sum-hdr">
+          <span class="sum-title">Summary</span>
+          <div class="seg-toggle">
+            <button class="seg-btn active" data-period="day">Day</button>
+            <button class="seg-btn"        data-period="month">Mo</button>
+            <button class="seg-btn"        data-period="year">Yr</button>
+          </div>
+        </div>
+        <div class="sum-row"><span class="sum-lbl">System Production</span><span class="sum-val" id="sum-prod">—</span></div>
+        <div class="sum-row"><span class="sum-lbl">Load Consumption</span><span class="sum-val" id="sum-load">—</span></div>
+        <div class="sum-row"><span class="sum-lbl">CO₂ Reduction</span><span class="sum-val" id="sum-co2">—</span></div>
+        <div class="prog-wrap">
+          <div class="prog-row"><span style="color:var(--accent)">● Self-Consumption</span><span id="sum-self-pct">—</span></div>
+          <div class="prog-bar"><div class="prog-fill a" id="sum-self-bar" style="width:0%"></div></div>
+          <div class="prog-row"><span style="color:var(--blue)">● Grid Export</span><span id="sum-grid-pct">—</span></div>
+          <div class="prog-bar"><div class="prog-fill b" id="sum-grid-bar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+    </aside>
+  </div><!-- /body-grid -->
+
+  <!-- ── ARCHITECTURE DATA FLOW STRIP ─────────────────────── -->
+  <div class="arch-strip">
+    <div class="arch-title">System Architecture — Data Flow</div>
+    <div class="arch-flow">
+
+      <div class="arch-node">
+        <div class="arch-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="arch-node-lbl">Grid Telemetry / SCADA CSV</div>
+      </div>
+      <div class="arch-arrow">→</div>
+
+      <div class="arch-node">
+        <div class="arch-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+        </div>
+        <div class="arch-node-lbl">Frontend Dashboard (HTML5 / Chart.js)</div>
+      </div>
+      <div class="arch-arrow">→</div>
+
+      <div class="arch-node">
+        <div class="arch-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="arch-node-lbl">Flask Backend API</div>
+      </div>
+      <div class="arch-arrow">→</div>
+
+      <div class="arch-node">
+        <div class="arch-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="arch-node-lbl">Analytics Core (Pandas / NumPy)</div>
+      </div>
+      <div class="arch-arrow">→</div>
+
+      <div class="arch-node">
+        <div class="arch-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        </div>
+        <div class="arch-node-lbl">Asset Anomaly Diagnostic Engine</div>
+      </div>
+      <div class="arch-arrow">→</div>
+
+      <div class="arch-node">
+        <div class="arch-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        </div>
+        <div class="arch-node-lbl">BESS Curtailment Optimizer</div>
+      </div>
+      <div class="arch-arrow">→</div>
+
+      <div class="arch-node">
+        <div class="arch-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="arch-node-lbl">Agentic Synthesizer</div>
+      </div>
+      <div class="arch-arrow">→</div>
+
+      <div class="arch-node">
+        <div class="arch-icon" style="border-color:rgba(0,212,170,.4);background:rgba(0,212,170,.08);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </div>
+        <div class="arch-node-lbl" style="color:var(--accent);">IBM watsonx.ai Granite-3</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── BOTTOM ROW: ALARMS + BLUF ─────────────────────────── -->
+  <div class="bottom-row">
+
+    <!-- Alarm Panel -->
+    <div class="card alarm-card">
+      <div class="card-header">
+        <span class="card-title">Alarm Records</span>
+        <div class="filter-row">
+          <button class="fb on" data-f="all">All</button>
+          <button class="fb"    data-f="critical">Critical</button>
+          <button class="fb"    data-f="warning">Warning</button>
+        </div>
+      </div>
+      <div class="alarm-list" id="alarm-list">
+        <div class="ph-row">Run analysis to populate</div>
+      </div>
+    </div>
+
+    <!-- BLUF Panel -->
+    <div class="card bluf-card">
+      <div class="card-header">
+        <span class="card-title">Operator BLUF Brief</span>
+        <span class="bluf-badge">IBM Granite · AI Synthesised</span>
+      </div>
+      <pre class="bluf-body" id="bluf-body">Run the pre-loaded sample or upload telemetry CSV to generate the operator brief powered by IBM watsonx.ai granite-3-8b-instruct.</pre>
+    </div>
+
+  </div><!-- /bottom-row -->
+
+</div><!-- /page -->
+
+<!-- ════════════════════════════════════════ VIEW DETAILS MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <span class="modal-title">AIE-DR Dispatch Details</span>
+      <button class="modal-close" id="modal-close">&times;</button>
+    </div>
+    <div class="modal-row"><span class="modal-lbl">Peak Demand</span><span class="modal-val" id="modal-peak-dem">—</span></div>
+    <div class="modal-row"><span class="modal-lbl">Peak Net-Load Ramp</span><span class="modal-val" id="modal-peak-ramp">—</span></div>
+    <div class="modal-row"><span class="modal-lbl">Midday Surplus</span><span class="modal-val" id="modal-surplus">—</span></div>
+    <div class="modal-row"><span class="modal-lbl">Avoided Curtailment</span><span class="modal-val" id="modal-curtail">—</span></div>
+    <div class="modal-row"><span class="modal-lbl">BESS Peak SoC</span><span class="modal-val" id="modal-soc">—</span></div>
+    <div class="modal-row"><span class="modal-lbl">Total Solar</span><span class="modal-val" id="modal-solar">—</span></div>
+    <div class="modal-row"><span class="modal-lbl">Total Wind</span><span class="modal-val" id="modal-wind">—</span></div>
+    <div class="modal-row"><span class="modal-lbl">Asset Alerts</span><span class="modal-val" id="modal-alerts">—</span></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

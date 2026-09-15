@@ -1,8 +1,8 @@
- Architecture
+# Architecture — GridVision AI
 
 ## System Architecture
 
-The GridPulse AI platform is designed as an agentic, event-driven decision support system. It continuously ingests time-series electrical grid telemetry and asset SCADA sensor feeds, executes dual-horizon load and renewable forecasting, computes physics-informed asset degradation metrics, runs curtailment-minimization storage dispatch math, and synthesizes shift-ready operational briefings through IBM watsonx foundation models.
+The GridVision AI platform is designed as an agentic, event-driven decision support system. It continuously ingests time-series electrical grid telemetry and asset SCADA sensor feeds, executes dual-horizon load and renewable forecasting, computes physics-informed asset degradation metrics, runs curtailment-minimisation storage dispatch math, and synthesises shift-ready operational briefings through IBM watsonx foundation models.
 
 ```mermaid
 graph TD

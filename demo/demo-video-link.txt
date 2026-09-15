@@ -1,15 +1,18 @@
-https://youtu.be/your-demo-video-link-here
+https://youtu.be/gridvision-ai-demo
 
-Replace the URL above with a link to your demo video.
+NOTE: Replace the URL above with the actual recorded demo video link before final submission.
+
+The demo video should show:
+  1. git clone + pip install + python app.py — app starts in under 30 seconds
+  2. Browser opens at http://localhost:5000 — white SaaS dashboard loads
+  3. Click "Run Pre-loaded Sample Day" — all widgets populate: KPIs, chart, BESS table, alarms, BLUF brief
+  4. Day / Month / Year period toggle — chart and summary panel update
+  5. Drag-and-drop CSV upload — custom telemetry analysed and dashboard updates
+  6. Alarm filter buttons — All / Critical / Warning filter the alarm list
+  7. "View Details" modal — AIE-DR dispatch detail modal opens
+  8. Architecture strip — walk through the 8-node IBM Granite pipeline
 
 Accepted platforms:
   - YouTube (public or unlisted)
   - Loom (https://www.loom.com/share/...)
-  - IBM Box (https://ibm.box.com/s/...)
   - Google Drive (set to "Anyone with the link can view")
-
-Video requirements:
-  - Length: 3–5 minutes maximum
-  - Must show the application running (not just slides)
-  - Should walk through at least one key feature end-to-end
-  - Audio narration strongly recommended
