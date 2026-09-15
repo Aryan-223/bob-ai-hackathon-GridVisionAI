@@ -32,8 +32,6 @@ graph TD
 
 ## Data Flow
 
-[Describe how data moves through your system from input to output.]
-
 1. Telemetry Ingestion & Column Normalization: The user uploads a 24-hour sensor log CSV (or selects the built-in sample day) via the web interface. The backend ingests the file and automatically normalizes varied naming schemas into standardized internal parameters (grid_demand_mw, actual_solar_mw, actual_wind_mw, inverter_temp_c).
 2. ### 📈 Net Load & Ramp Analytics 
 * **Net Load Formula:**  
