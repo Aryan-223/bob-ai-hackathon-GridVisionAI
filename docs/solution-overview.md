@@ -44,9 +44,10 @@ GridVision AI is an intelligent operations advisor built for electrical grid ope
 
 | Decision | Rationale |
 |---|---|
-| [e.g., Used watsonx.ai for anomaly detection] | [e.g., Pre-trained models reduced time-to-value vs. building from scratch] |
-| [Decision 2] | [Rationale 2] |
-| [Decision 3] | [Rationale 3] |
+| Physics-Informed Deterministic Diagnostics | Sensor failure modes like inverter thermal clipping and panel soiling follow known physical equations; rule-based PR thresholds are faster, transparent, and more reliable than black-box models. |
+| Pre-Aggregation before LLM Inference | Passing structured summary JSON rather than thousands of raw time-series rows to IBM Granite conserves watsonx Resource Units (RUs), prevents hallucination, and reduces inference latency. |
+| Dynamic Column Normalization | Permissive column matching ensures telemetry CSVs from varying SCADA or AMI sources run smoothly without throwing formatting crashes. |
+| IBM Bob IDE for Full-Stack Scaffolding | Used Bob's Plan and Code modes to scaffold the backend API, algorithms, and automated test suite, tracking development sessions under `bob_sessions/`. |
 
 ## IBM Technologies Used
 
