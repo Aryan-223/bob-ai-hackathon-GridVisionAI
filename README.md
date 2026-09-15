@@ -12,7 +12,7 @@
 |---|---|
 | **Team Name** | GridVision-AI |
 | **Track** | AI |
-| **Team Lead** | Aryan Patel — 25ee015@charusat.edu.in |
+| **Team Lead** | Aryan Jariwala — 25ee015@charusat.edu.in |
 | **Members** | Meet · Shreya · Keyushi |
 
 ---
