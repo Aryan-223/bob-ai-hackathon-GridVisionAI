@@ -2,16 +2,18 @@
 
 ## What We Built
 
-[Describe your solution in plain language. Avoid jargon — write as if explaining to a smart colleague unfamiliar with your tech stack.]
+GridVision AI is an intelligent operations advisor built for electrical grid operators and renewable power plant managers. It acts as a co-pilot in the control room to solve two opposing daily challenges: wasting excess clean power at midday (curtailment) and struggling with rapid consumer electricity surges in the evening (load spikes). Instead of forcing engineers to manually cross-reference separate weather forecasts, power charts, and sensor logs across multiple screens, GridPulse AI continuously calculates net demand, diagnoses physical equipment issues (like overheating solar inverters), schedules battery storage to store surplus green energy, and uses IBM Granite foundation models to draft concise, shift-ready briefing notes.
 
 ## How It Works
 
 [Explain the core mechanism step by step. A numbered list or simple flow works well here.]
 
-1. [Step 1: e.g., "User connects their GitHub repository via OAuth"]
-2. [Step 2: e.g., "The system ingests pipeline logs and feeds them to watsonx.ai"]
-3. [Step 3: e.g., "An anomaly score is computed and displayed on the dashboard"]
-4. [Step 4: e.g., "Alerts are sent to Slack when the score exceeds a threshold"]
+1. Ingest & Normalize Telemetry: The operator uploads a 24-hour grid telemetry CSV or loads the pre-configured sample day; the backend maps various column naming formats into standardized grid variables.  
+2. ompute Net Load & Detect Ramps: The analytics core calculates the net load curve by subtracting solar and wind generation from gross demand, flagging any evening net ramp exceeding $50\text{ MW/hr}$.  
+3. Diagnose Asset Health & Root Causes: Sensor feeds are compared against theoretical generation curves using Performance Ratio metrics to identify underperforming equipment and assign root causes, such as inverter thermal clipping or panel soiling.  
+4. Optimize Battery Dispatch & Curtailment: The engine models a Battery Energy Storage System (BESS) to charge during midday surplus hours (minimizing clean energy curtailment) and discharge during peak evening demand.  
+5. Generate BLUF Operator Brief: The structured findings are passed to ibm/granite-3-8b-instruct via watsonx.ai to output a clear, actionable Bottom-Line-Up-Front (BLUF) operational memo.  
+6. Display Real-Time Dashboard: The web UI renders the interactive 24-hour load-versus-renewables forecast chart, color-coded asset diagnostic alerts, battery state-of-charge schedule, and the generated operational brief. 
 
 ## Architecture Diagram
 
@@ -20,9 +22,22 @@
 [Optionally include a simple ASCII or Mermaid diagram here for quick reference.]
 
 ```
-[User] → [Frontend: React] → [API: FastAPI] → [watsonx.ai] → [Dashboard]
-                                    ↓
-                             [PostgreSQL DB]
+[Operator / CSV Data] ──► [Web Dashboard: HTML/JS/Chart.js]
+                                     │
+                                (REST API)
+                                     ▼
+                            [Backend: Flask Core]
+                                     │
+                  ┌──────────────────┴──────────────────┐
+                  ▼                                     ▼
+       [Analytics Engine (src/)]               [IBM watsonx.ai]
+       • Net Load & Ramp Forecast              • granite-3-8b-instruct
+       • Performance Ratio Diagnostics         • BLUF Brief Synthesis
+       • BESS Curtailment Optimizer
+                  │                                     │
+                  └──────────────────┬──────────────────┘
+                                     ▼
+                         [Operator Action Brief]
 ```
 
 ## Key Design Decisions
@@ -35,7 +50,6 @@
 
 ## IBM Technologies Used
 
-[Explain specifically HOW you used each IBM technology — not just that you used it.]
-
-- **[IBM Tech 1, e.g., watsonx.ai]:** [How it was used — e.g., "Used the `ibm/granite-13b-instruct-v2` model via the Python SDK to classify anomaly types from log text."]
-- **[IBM Tech 2]:** [How it was used]
+- IBM Bob IDE (Required Core Component): Served as the AI pair programmer across the full software development lifecycle. Used Plan Mode to structure module boundaries and Code/Agent Mode to write src/analytics.py, API endpoints in src/app.py, automated tests, and session report exports stored in bob_sessions/.  
+- IBM watsonx.ai & Granite Models: Used the ibm/granite-3-8b-instruct foundation model via the Prompt Lab and Python SDK to transform complex multi-variable grid metrics into shift-ready Bottom-Line-Up-Front (BLUF) operator summaries.  
+- IBM Cloud Security Controls: Enforced credential hygiene using environment variable isolation (.env) alongside pre-configured .gitignore and .bobignore patterns to prevent cloud API key exposure.  
