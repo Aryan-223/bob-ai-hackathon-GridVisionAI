@@ -23,11 +23,12 @@ graph TD
 
 | Component | Technology | Responsibility |
 |---|---|---|
-| Frontend | [e.g., React 18] | [e.g., Dashboard UI, user interaction] |
-| Backend API | [e.g., FastAPI] | [e.g., Business logic, orchestration] |
-| AI / ML | [e.g., watsonx.ai] | [e.g., Anomaly scoring, classification] |
-| Database | [e.g., PostgreSQL] | [e.g., Storing pipeline events and scores] |
-| Notifications | [e.g., Slack API] | [e.g., Alerting on threshold breaches] |
+| Frontend Dashboard | HTML5, Modern CSS, Vanilla JS, Chart.js | Visualizes 24-hour demand vs. renewables curves, displays interactive asset status cards, and provides CSV upload interfaces. |
+| Backend API Service | Python 3.10+, Flask RESTful API | Coordinates endpoint routing (`/api/analyze`, `/api/sample`), orchestrates data validation, and maps incoming column aliases. |
+| Analytics Core | Pandas, NumPy, SciPy | Computes net-load equations, flags ramp-rate breaches (> 50 MW/hr), and models battery storage (BESS) state-of-charge constraints. |
+| Asset Diagnostic Module | Python (physics-informed rules) | Calculates solar/wind Performance Ratios (PR) and identifies root causes such as inverter thermal clipping, soiling, and blade pitch degradation. |
+| Agentic Brief Generator | IBM watsonx.ai Python SDK (`ibm-watsonx-ai`) | Queries `ibm/granite-3-8b-instruct` to turn numerical telemetry into an executive Bottom-Line-Up-Front (BLUF) operational memo. |
+| Development & Pair Agent | IBM Bob IDE (Required) | Supports code generation, architectural scaffolding, refactoring, and session export tracking under `bob_sessions/`. |
 
 ## Data Flow
 
