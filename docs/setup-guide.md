@@ -19,8 +19,8 @@ No Node.js, Docker, database, or cloud deployment is needed.
 ## Step 1 — Clone the Repository
 
 ```bash
-git clone https://github.com/drijesh-ppatel/bob-ai-hackathon-Team.git
-cd bob-ai-hackathon-Team/src
+git clone https://github.com/drijesh-ppatel/bob-ai-hackathon-GridVisionAI.git
+cd bob-ai-hackathon-GridVisionAI/src
 ```
 
 ---
