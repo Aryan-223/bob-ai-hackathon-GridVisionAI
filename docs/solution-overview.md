@@ -6,8 +6,6 @@ GridVision AI is an intelligent operations advisor built for electrical grid ope
 
 ## How It Works
 
-[Explain the core mechanism step by step. A numbered list or simple flow works well here.]
-
 1. Ingest & Normalize Telemetry: The operator uploads a 24-hour grid telemetry CSV or loads the pre-configured sample day; the backend maps various column naming formats into standardized grid variables.  
 2. ompute Net Load & Detect Ramps: The analytics core calculates the net load curve by subtracting solar and wind generation from gross demand, flagging any evening net ramp exceeding $50\text{ MW/hr}$.  
 3. Diagnose Asset Health & Root Causes: Sensor feeds are compared against theoretical generation curves using Performance Ratio metrics to identify underperforming equipment and assign root causes, such as inverter thermal clipping or panel soiling.  
